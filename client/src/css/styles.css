@@ -1,0 +1,13 @@
+   /*-------------------------------------
+   Layout
+   -------------------------------------- */
+.reactdiv{
+  margin-top: 80px;
+}
+.active{
+  background-color: blue;
+}
+.alert{
+
+  margin-top: 5px;
+}

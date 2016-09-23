@@ -1,0 +1,383 @@
+var React=require("react");
+var ReactDom=require("react-dom");
+
+var CommentBox=React.createClass({
+  render:function(){
+    return(
+      <div>
+      <h2>I am a CommentBox</h2>
+      </div>
+          )
+  }
+})
+ReactDom.render(<CommentBox/>,document.getElementById("app"));
+
+
+
+var React=require('react');
+var ReactDOM=require('react-dom');
+var Child=require('./component/Child.js');
+var Child2=require("./component/Child2.js");
+
+var MainComponent = React.createClass({
+  render:function(){
+    return (
+      <div>
+       <h2>Hello from React</h2>
+       <Child data='hello'/>
+       <Child2 />
+      
+      </div>
+        )
+  }
+})
+ReactDOM.render(<MainComponent/>,document.getElementById('app'));
+//ReactDOM.render(<Child/>,document.getElementById('app2'));
+
+
+
+var CommentList = React.createClass({
+  render: function() {
+    return (
+      <div className="commentList">
+        Hello, world! I am a CommentList.
+      </div>
+    );
+  }
+});
+var CommentForm = React.createClass({
+  render: function() {
+    return (
+      <div className="commentForm">
+        Hello, world! I am a CommentForm.
+      </div>
+    );
+  }
+});
+
+// tutorial4.js
+var Comment = React.createClass({
+  render: function() {
+    return (
+      <div className="comment">
+        <h2 className="commentAuthor">
+          {this.props.author}
+        </h2>
+        {this.props.children}
+      </div>
+    );
+  }
+});
+
+
+
+
+
+
+
+
+<Comment author="Pete Hunt">This is one comment</Comment>
+<Comment author="Jordan Walke">This is *another* comment</Comment>
+
+
+var Comment = React.createClass({
+  render: function() {
+    var md = new Remarkable();
+    return (
+      <div className="comment">
+        <h2 className="commentAuthor">
+          {this.props.author}
+        </h2>
+        {md.render(this.props.children.toString())}
+      </div>
+    );
+  }
+});
+
+// tutorial12.js
+var CommentBox = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  render: function() {
+    return (
+      <div className="commentBox">
+        <h1>Comments</h1>
+        <CommentList data={this.state.data} />
+        <CommentForm />
+      </div>
+    );
+  }
+});
+
+
+var data = [
+  {id: 1, author: "Pete Hunt", text: "This is one comment"},
+  {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
+];
+
+
+var CommentBox = React.createClass({
+  render: function() {
+    return (
+      <div className="commentBox">
+        <h1>Comments</h1>
+        <CommentList data={this.props.data} />
+        <CommentForm />
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <CommentBox data={data} />,
+  document.getElementById('content')
+);
+
+
+
+var CommentList = React.createClass({
+  render: function() {
+    var commentNodes = this.props.data.map(function(comment) {
+      return (
+        <Comment author={comment.author} key={comment.id}>
+          {comment.text}
+        </Comment>
+      );
+    });
+    return (
+      <div className="commentList">
+        {commentNodes}
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <CommentBox url="/api/comments" />,
+  document.getElementById('content')
+);
+
+
+
+
+
+var CommentBox = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  render: function() {
+    return (
+      <div className="commentBox">
+        <h1>Comments</h1>
+        <CommentList data={this.state.data} />
+        <CommentForm />
+      </div>
+    );
+  }
+});
+
+
+
+
+var CommentBox = React.createClass({
+  loadCommentsFromServer: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render: function() {
+    return (
+      <div className="commentBox">
+        <h1>Comments</h1>
+        <CommentList data={this.state.data} />
+        <CommentForm />
+      </div>
+    );
+  }
+});
+
+ReactDOM.render(
+  <CommentBox url="/api/comments" pollInterval={2000} />,
+  document.getElementById('content')
+);
+ 
+
+
+
+
+
+
+
+
+
+
+componentDidMount(){
+        this.getDataFromServer('http://fcctop100.herokuapp.com/api/fccusers/top/recent');
+    },
+    //showResult Method
+        showResult: function(response) {
+
+            this.setState({
+                data: response
+            });
+    },
+    //making ajax call to get data from server
+    getDataFromServer:function(URL){
+        $.ajax({
+            type:"GET",
+            dataType:"json",
+            url:URL,
+            success: function(response) {
+                this.showResult(response);
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+    render:function(){
+        return(
+            <div>
+                <Result result={this.state.data}/>
+            </div>
+        );
+    }
+
+<!-- DOCTYPE HTML -->
+<html>
+<head>
+<title>iTunes API</title>
+</head>
+<body>
+<div id="content"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>   
+<script src="https://fb.me/react-0.14.6.js"></script>
+<script src="https://fb.me/react-dom-0.14.6.js"></script>
+<script src="http://fb.me/JSXTransformer-0.12.1.js"></script>
+<script type="text/jsx">
+
+var App = React.createClass({
+    
+    getInitialState: function() {
+        return {
+            searchResults: []
+        }
+    },
+
+    showResults: function(response){
+        this.setState({
+            searchResults: response.results
+        })
+    },
+    
+    search: function(URL){
+        $.ajax({
+            type: "GET",
+            dataType: 'jsonp',
+            url: URL,
+            success: function(response){
+                this.showResults(response);
+            }.bind(this)
+        });
+    },
+
+    render: function(){
+        return (
+            <div>
+                <SearchBox search={this.search} />
+                <Results searchResults={this.state.searchResults} />
+            </div>
+        );
+    },
+
+
+});
+
+var SearchBox = React.createClass({
+    
+    render: function(){
+        return (
+            <div>
+                <input type="text" ref="query" />
+                <select ref="category">
+                    <option value="software">Apps</option>
+                    <option value="movie">Films</option>
+                </select>
+                <input type="submit" onClick={this.createAjax} />
+            </div>
+        );
+    },
+
+    createAjax: function(){
+        var query    = ReactDOM.findDOMNode(this.refs.query).value;
+        var category = ReactDOM.findDOMNode(this.refs.category).value;
+        var URL      = 'https://itunes.apple.com/search?term=' + query +'&country=us&entity=' + category;
+        this.props.search(URL)
+    }
+
+});
+
+var Results = React.createClass({
+    
+    render: function(){
+        var resultItems = this.props.searchResults.map(function(result) {
+            return <ResultItem key={result.trackId} trackName={result.trackName} />
+        });
+        return(
+            <ul>
+                {resultItems}
+            </ul>           
+        );
+    }
+});
+
+var ResultItem = React.createClass({
+    
+    render: function(){
+        return <li>{this.props.trackName}</li>;
+    }
+});
+
+ReactDOM.render(<App />,  document.getElementById("content"));
+
+</script>
+view rawindex.html hosted with ? by GitHub
+
+
+handleClick:function(data){
+    //e.preventDefault();
+    var data=data;
+    console.log("url:"+data);
+    this.setState({searchdata:data});
+    var u=this.state.searchdata;
+    componentDidMount(u);
+  },
